@@ -1,74 +1,60 @@
-Webcam.set({
-    width: 320,
-    height: 240,
-    image_format: 'png',
-    png_quality: 90
-   });
-   camera = document.getElementById("webcam_camera");
-   Webcam.attach(camera);
+prediction = "";
 
-   function capture_img()
-   {
-    Webcam.snap(function(data_uri)
-    {
-        document.getElementById("result_camera").innerHTML = '<img id="captured_img" src="'+data_uri+'"/>';
-       
-       });
-   }
-   function predict_img()
-   {
-    img_captured = document.getElementById("captured_img");
-    Classifier.classify(img_captured , result_img);
-   }
-   console.log("ml5 version:" , ml5.version );
-   Classifier = ml5.imageClassifier("https://teachablemachine.withgoogle.com/models/C2MJYpJwi/model.json" , modelLoaded);
-  function modelLoaded()
-  {
-      console.log("modelLoaded");
-  } 
+Webcam.set({   
+     width:350,
+     height: 300,
+     image_format: 'png',
+     png_quality: 90
+});
 
-  
-function result_img(error , results)
-{
-    if (error)
-    {
-        console.error(error);
-    }
-    else 
-    {
-        console.log(results);
-        gestures = results[0].label;
-        toSpeak = " ";
+Webcam.attach('#camera');
 
-        if (gestures == "Super")
-        {
-            toSpeak = "This is looking amazing";
-            document.getElementById("emoji_update").innerHTML = "&#128076;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
-        if (gestures == "Thumbs Up")
-        {
-            toSpeak = "All The best";
-            document.getElementById("emoji_update").innerHTML = "&#128077;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
-        if (gestures == "Victory")
-        {
-            toSpeak = "That was a marvellous victory";
-            document.getElementById("emoji_update").innerHTML = "&#9996;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
-      
-        speak();
-    }
+function take_snapshot(data_uri) {
+     Webcam.snap(function(data_uri) {
+          document.getElementById("result").innerHTML = '<img id="captured_image" src="'+data_uri+'"/>';                  
+     });
 }
-function speak(){
-    var synth = window.speechSynthesis;
 
-    speak_data = toSpeak;
+console.log('ml5.version:' , ml5.version);
 
-    var utterThis = new SpeechSynthesisUtterance(speak_data);
+classifier = ml5.imageClassifier("https://teachablemachine.withgoogle.com/models/--4wBrgu0/model.json" , modelLoaded);
 
-    synth.speak(utterThis);
+function modelLoaded(){
+     console.log("modelLoaded!");
+}
+
+function speak() {
+     var john = window.speechSynthesis;
+     speak_data = "The prediction is" + prediction;
+     var utterThis = new SpeechSynthesisUtterance(speak_data);
+     john.speak(utterThis);
+}
+
+function check() {
+     img = document.getElementById('captured_image');
+     classifier.classify(img, gotResult);
+}
+
+function gotResult(error, results){
+
+     if(error){
+          console.error(error);
+     }
+     else{
+          console.log(results);
+          document.getElementById("result_emotion_name").innerHTML = results[0].label;
+          prediction = results[0].label;
+          speak();
+          if(results[0].label == "All the Best!"){
+              document.getElementById("update_emoji").innerHTML = "&#128077;"; 
+          }
+          if(results[0].label == "Victory!"){
+               document.getElementById("update_emoji").innerHTML = "&#9996;"; 
+           }
+           if(results[0].label == "Amazing!"){
+               document.getElementById("update_emoji").innerHTML = "&#128076;"; 
+           }
+
+     }
 
 }
