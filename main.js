@@ -58,30 +58,7 @@ function result_img(error , results)
             document.getElementById("emoji_update").innerHTML = "&#9996;";
             document.getElementById("result_emotion_name").innerHTML = results [0].label;
         }
-        if (gestures == "Thumbs Down")
-        {
-            toSpeak = "Do you dislike it ?";
-            document.getElementById("emoji_update").innerHTML = "&#128078;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
-        if (gestures == "Thumbs Down")
-        {
-            toSpeak = "Do you dislike it ?";
-            document.getElementById("emoji_update").innerHTML = "&#128078;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
-        if (gestures == "Raised Hand")
-        {
-            toSpeak = "Raising hand";
-            document.getElementById("emoji_update").innerHTML = "&#9995;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
-        if (gestures == "Rocking Sign")
-        {
-            toSpeak = "You rock like a star";
-            document.getElementById("emoji_update").innerHTML = "&#129304;";
-            document.getElementById("result_emotion_name").innerHTML = results [0].label;
-        }
+      
         speak();
     }
 }
